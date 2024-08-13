@@ -34,7 +34,7 @@ func createParseHandler(application app.Application) echo.HandlerFunc {
 }
 
 func indexPage() (string, g.Node) {
-	return "Welcome!", Div(Class("flex flex-row justify-center  h-screen grow"),
+	return "HTML To Gomponents", Div(Class("flex flex-row justify-center  h-screen grow"),
 
 		Div(Class("basis-5/12 bg-gray-200 flex flex-col"),
 			Textarea(ID("htmlText"), Class("grow  w-full  border-gray-300 bg-gray-100 align-top shadow-sm sm:text-sm"), Name("htmlText"), hx.Boost("true"), hx.Trigger("input from:#htmlText"), hx.Post("/parse"), hx.Target("#result"), Placeholder("WRITE HTML HERE")),
