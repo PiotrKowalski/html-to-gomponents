@@ -5,7 +5,6 @@ import (
 	"html-to-gomponents/internal/domain"
 	"html-to-gomponents/internal/requests"
 	"html-to-gomponents/internal/responses"
-	"log"
 )
 
 type parseHandler struct {
@@ -19,7 +18,6 @@ func (h parseHandler) Handle(ctx context.Context, in requests.Parse) (responses.
 	if err != nil {
 		return responses.Parse{}, err
 	}
-	log.Println(11)
 
 	format, err := h.formatter.Format(cNode)
 	if err != nil {

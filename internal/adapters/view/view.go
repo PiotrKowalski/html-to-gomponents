@@ -9,7 +9,6 @@ import (
 	. "github.com/maragudk/gomponents/html"
 	"html-to-gomponents/internal/app"
 	"html-to-gomponents/internal/requests"
-	"log"
 )
 
 func createIndexPageHandler() echo.HandlerFunc {
@@ -21,8 +20,6 @@ func createIndexPageHandler() echo.HandlerFunc {
 
 func createParseHandler(application app.Application) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		log.Println(hxhttp.GetTrigger(c.Request().Header) == "htmlText")
-
 		if hxhttp.GetTrigger(c.Request().Header) == "htmlText" {
 			text := c.FormValue("htmlText")
 			handle, err := application.ParseHandler.Handle(c.Request().Context(), requests.Parse{Body: []byte(text)})
@@ -40,7 +37,7 @@ func indexPage() (string, g.Node) {
 	return "Welcome!", Div(Class("flex flex-row justify-center  h-screen grow"),
 
 		Div(Class("basis-5/12 bg-gray-200 flex flex-col"),
-			Textarea(ID("htmlText"), Class("grow  w-full  border-gray-300 bg-gray-100 align-top shadow-sm sm:text-sm"), Name("htmlText"), hx.Boost("true"), hx.Trigger("input from:#htmlText"), hx.Post("/parse"), hx.Target("#result"), Placeholder("Write HTML HERE")),
+			Textarea(ID("htmlText"), Class("grow  w-full  border-gray-300 bg-gray-100 align-top shadow-sm sm:text-sm"), Name("htmlText"), hx.Boost("true"), hx.Trigger("input from:#htmlText"), hx.Post("/parse"), hx.Target("#result"), Placeholder("WRITE HTML HERE")),
 		),
 		Div(Class("basis-1/12 bg-gray-200")),
 		Div(Class("basis-5/12 bg-gray-200 flex flex-col"),
