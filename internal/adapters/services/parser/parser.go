@@ -40,17 +40,17 @@ func (p Parser) FromBytes(in []byte) (*domain.CustomNode, error) {
 
 			for _, attr := range n.Attr {
 				key := htmlToGomponentsName(attr.Key)
-				cNode.Attrs[key] = attr.Val
+				cNode.AddAttr(key, attr.Val)
 			}
 		}
 
 		if n.Type == html.TextNode && len(strings.TrimSpace(n.Data)) > 0 {
-			cNode.ParentNode.Attrs["g.Text"] = strings.TrimSpace(n.Data)
+			cNode.ParentNode.AddAttr("g.Text", strings.TrimSpace(n.Data))
 		}
 
 		var i uint
 		for c := n.FirstChild; c != nil; c = c.NextSibling {
-			cNode.Nodes = append(cNode.Nodes, &domain.CustomNode{ParentNode: cNode, Level: cNode.Level + 1, Attrs: make(map[string]string)})
+			cNode.Nodes = append(cNode.Nodes, &domain.CustomNode{ParentNode: cNode, Level: cNode.Level + 1})
 			cNode.Nodes[i] = f(c, cNode.Nodes[i])
 			i++
 		}

@@ -9,40 +9,48 @@ type CustomNode struct {
 	ParentNode *CustomNode
 	Level      uint
 	Type       string
-	Attrs      map[string]string
+	Attrs      []attr
 	Nodes      []*CustomNode
 }
 
-func (c CustomNode) String() string {
+func (n *CustomNode) AddAttr(key, value string) {
+	n.Attrs = append(n.Attrs, attr{key: key, value: value})
+}
+
+func (n *CustomNode) String() string {
 	str := ""
 
-	str += c.Type
+	str += n.Type
 	str += "("
 
-	if len(c.Attrs) > 0 {
-		for k, v := range c.Attrs {
-			if len(v) > 0 {
-				str = fmt.Sprintf("%s%s(\"%s\"),", str, k, v)
+	if len(n.Attrs) > 0 {
+		for _, v := range n.Attrs {
+			if len(v.value) > 0 {
+				str = fmt.Sprintf("%s%s(\"%s\"),", str, v.key, v.value)
 			} else {
-				str = fmt.Sprintf("%s%s(),", str, k)
+				str = fmt.Sprintf("%s%s(),", str, v.key)
 			}
 
 		}
 	}
 
-	if len(c.Nodes) > 0 {
-		for _, v := range c.Nodes {
+	if len(n.Nodes) > 0 {
+		for _, v := range n.Nodes {
 			if v.Type != "" {
-				str = fmt.Sprintf("%s\n%s%s,", str, strings.Repeat(" ", int(c.Level)), v)
+				str = fmt.Sprintf("%s\n%s%s,", str, strings.Repeat(" ", int(n.Level)), v)
 			}
 		}
 	}
 
-	str = fmt.Sprintf("%s\n%s)", str, strings.Repeat(" ", int(c.Level)))
+	str = fmt.Sprintf("%s\n%s)", str, strings.Repeat(" ", int(n.Level)))
 
 	return removeBrackets(str)
 }
 
 func removeBrackets(s string) string {
 	return strings.ReplaceAll(strings.ReplaceAll(s, "[", ""), "]", "")
+}
+
+type attr struct {
+	key, value string
 }
