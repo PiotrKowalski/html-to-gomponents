@@ -39,7 +39,7 @@ jobs:
 
     - name: Push Docker image to Artifact Registry
       run: |
-        docker push europe-west1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/htg/htg:latest
+        docker push europe-west1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/htg
 
     - name: Deploy to Cloud Run
       run: |
