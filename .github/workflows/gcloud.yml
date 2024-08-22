@@ -40,10 +40,10 @@ jobs:
       run: |
         docker push europe-west1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/htg/htg:latest
 
-    # - name: Deploy to Cloud Run
-    #   run: |
-    #     gcloud run deploy your-service-name \
-    #     --image europe-west1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/your-repository/your-image:latest \
-    #     --region <REGION> \
-    #     --platform managed \
-    #     --allow-unauthenticated
+    - name: Deploy to Cloud Run
+      run: |
+        gcloud run deploy your-service-name \
+        --image europe-west1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/htg/htg:latest \
+        --region europe-west1 \
+        --platform managed \
+        --allow-unauthenticated
