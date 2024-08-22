@@ -1,14 +1,17 @@
 package view
 
 import (
+	"errors"
 	"github.com/labstack/echo/v4"
 	g "github.com/maragudk/gomponents"
 	hx "github.com/maragudk/gomponents-htmx"
 	hxhttp "github.com/maragudk/gomponents-htmx/http"
 	c "github.com/maragudk/gomponents/components"
 	. "github.com/maragudk/gomponents/html"
+	"html-to-gomponents/internal/adapters/services/parser"
 	"html-to-gomponents/internal/app"
 	"html-to-gomponents/internal/requests"
+	"net/http"
 )
 
 func createIndexPageHandler() echo.HandlerFunc {
@@ -24,19 +27,36 @@ func createParseHandler(application app.Application) echo.HandlerFunc {
 			text := c.FormValue("htmlText")
 			handle, err := application.ParseHandler.Handle(c.Request().Context(), requests.Parse{Body: []byte(text)})
 			if err != nil {
+				if errors.As(err, &parser.ParseErr) {
+					c.Logger().Error(err)
+					c.Response().Status = http.StatusBadRequest
+
+					return result(err.Error()).Render(c.Response())
+				}
+				c.Logger().Error(err)
 				return err
 			}
-
 			return result(handle.Body).Render(c.Response())
 		}
-		return nil
+		handle, err := application.ParseHandler.Handle(c.Request().Context(), requests.Parse{Body: []byte("")})
+
+		if err != nil {
+			if errors.As(err, &parser.ParseErr) {
+				c.Logger().Error(err)
+				c.Response().Status = http.StatusBadRequest
+				return result(err.Error()).Render(c.Response())
+			}
+			c.Logger().Error(err)
+			return err
+		}
+		return result(handle.Body).Render(c.Response())
 	}
 }
 
 func indexPage() (string, g.Node) {
 	return "HTML To Gomponents", Div(Class("flex flex-row justify-center  h-screen grow"),
 
-		Div(Class("basis-5/12 bg-gray-200 flex flex-col"),
+		Div(Class("basis-5/12 bg-gray-200 flex flex-col"), hx.Boost("true"), hx.Trigger("load"), hx.Post("/parse"), hx.Target("#result"),
 			Textarea(ID("htmlText"), Class("grow  w-full  border-gray-300 bg-gray-100 align-top shadow-sm sm:text-sm"), Name("htmlText"), hx.Boost("true"), hx.Trigger("input from:#htmlText"), hx.Post("/parse"), hx.Target("#result"), Placeholder("WRITE HTML HERE")),
 		),
 		Div(Class("basis-1/12 bg-gray-200")),

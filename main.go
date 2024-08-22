@@ -1,3 +1,6 @@
+//go:build !unsafe
+// +build !unsafe
+
 package main
 
 import (
@@ -11,7 +14,7 @@ func main() {
 	var port string
 	port, ok := os.LookupEnv("PORT")
 	if !ok {
-		port = "3060"
+		port = "3050"
 	}
 	application := app.New(app.Config{})
 

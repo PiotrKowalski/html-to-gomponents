@@ -2,6 +2,8 @@ package parser
 
 import (
 	"bytes"
+	"errors"
+	"fmt"
 	"golang.org/x/net/html"
 	"golang.org/x/text/cases"
 	"golang.org/x/text/language"
@@ -12,10 +14,12 @@ import (
 type Parser struct {
 }
 
+var ParseErr = errors.New("parse error")
+
 func (p Parser) FromBytes(in []byte) (*domain.CustomNode, error) {
 	hNode, err := html.Parse(bytes.NewReader(in))
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("%w: %v", ParseErr, err)
 	}
 
 	var findBody func(n *html.Node) *html.Node
