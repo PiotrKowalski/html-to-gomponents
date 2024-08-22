@@ -30,15 +30,16 @@ jobs:
 
     - name: Configure Docker to use the gcloud command-line tool credential helper
       run: |
-        gcloud auth configure-docker -q
-        
+        # gcloud auth configure-docker -q
+        gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://europe-west1-docker.pkg.dev
+
     - name: Build Docker image
       run: |
         docker build -t europe-west1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/htg/htg:latest .
 
     - name: Push Docker image to Artifact Registry
       run: |
-        docker push europe-west1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/htg/htg:latest
+        docker push europe-west1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/htg:latest
 
     - name: Deploy to Cloud Run
       run: |
