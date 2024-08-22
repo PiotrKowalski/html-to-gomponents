@@ -20,7 +20,7 @@ jobs:
     - id: 'auth'
       uses: 'google-github-actions/auth@v2'
       with:
-        project_id: ${{ secrets.GCP_PROJECT_ID }}
+        # project_id: ${{ secrets.GCP_PROJECT_ID }}
         workload_identity_provider: 'projects/34272123332/locations/global/workloadIdentityPools/htg-github/providers/htg-repo'
         service_account: "github-docker-connector@secure-medium-433319-a5.iam.gserviceaccount.com"
 
@@ -30,7 +30,6 @@ jobs:
 
     - name: Configure Docker to use the gcloud command-line tool credential helper
       run: |
-        gcloud auth login
         # gcloud auth configure-docker -q
         gcloud auth configure-docker europe-west1-docker.pkg.dev -q
         
