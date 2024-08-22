@@ -30,8 +30,8 @@ jobs:
 
     - name: Configure Docker to use the gcloud command-line tool credential helper
       run: |
-        # gcloud auth configure-docker -q
-        gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://europe-west1-docker.pkg.dev
+        gcloud auth configure-docker -q
+        gcloud auth configure-docker europe-west1-docker.pkg.dev -q
 
     - name: Build Docker image
       run: |
