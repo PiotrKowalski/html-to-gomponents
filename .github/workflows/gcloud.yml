@@ -26,9 +26,14 @@ jobs:
     - name: Set up Google Cloud SDK
       uses: google-github-actions/setup-gcloud@v2
 
-    - name: Configure Docker to use the gcloud command-line tool credential helper
+    # - name: Configure Docker to use the gcloud command-line tool credential helper
+    #   run: |
+    #     gcloud auth configure-docker -q
+
+    - name: sign-in to artifact registry
       run: |
-        gcloud auth configure-docker -q
+        gcloud auth configure-docker eu-west1-docker.pkg.dev --quiet
+    
 
     - name: Build Docker image
       run: |
