@@ -1,7 +1,7 @@
 name: Build and deploy to gcloud on pull request to main. Production
 
 on:
-  pull_request:
+  push:
     branches: [ "master" ]
 
 jobs:
