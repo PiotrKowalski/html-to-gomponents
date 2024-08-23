@@ -8,8 +8,6 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     environment: production
-    env:
-      ACTIONS_STEP_DEBUG: true
     permissions:
       contents: 'read'
       id-token: 'write'
