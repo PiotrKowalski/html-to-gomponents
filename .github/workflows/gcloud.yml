@@ -51,20 +51,11 @@ jobs:
         
         SERVICE_URL=$(gcloud run services describe html-to-gomponents --platform managed --region europe-west1 --format "value(status.url)")
 
-    - name: Update README with Service URL
-      run: |
-        echo "## Deployed Service\n\n[Access the deployed service here]($SERVICE_URL)" >> README.md
-        git config --global user.name 'github-actions'
-        git config --global user.email 'github-actions@github.com'
-        git add README.md
-        git commit -m "Update README with link to deployed Cloud Run service"
-        git push origin main
-
     - name: Update Repository Description
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
-        DESCRIPTION="Deployed service is available at: $SERVICE_URL"
+        DESCRIPTION="Small tool for development using Gomponents template lib. It allows to convert HTML structures into Gomponents code. Deployed service is available at: $SERVICE_URL"
         curl -X PATCH \
           -H "Authorization: token $GITHUB_TOKEN" \
           -H "Accept: application/vnd.github.v3+json" \
