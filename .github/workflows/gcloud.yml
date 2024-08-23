@@ -54,7 +54,8 @@ jobs:
       run: |
         DESCRIPTION="Small tool for development using Gomponents template lib. It allows to convert HTML structures into Gomponents code. Deployed service is available at: $SERVICE_URL"
         curl -X PATCH \
-          -H "Authorization: token $GITHUB_TOKEN" \
-          -H "Accept: application/vnd.github.v3+json" \
+          -H "Authorization: Bearer $GITHUB_TOKEN" \
+          -H "Accept: application/vnd.github+json" \
+          -H "X-GitHub-Api-Version: 2022-11-28" \
           https://api.github.com/repos/${{ github.repository }} \
-          -d "{\"description\": \"$DESCRIPTION\"}"
+          -d '{\"description\": \"$DESCRIPTION\"}'
