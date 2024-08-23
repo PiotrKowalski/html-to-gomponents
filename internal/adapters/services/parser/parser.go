@@ -5,8 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"golang.org/x/net/html"
-	"golang.org/x/text/cases"
-	"golang.org/x/text/language"
 	"html-to-gomponents/internal/domain"
 	"strings"
 )
@@ -40,11 +38,10 @@ func (p Parser) FromBytes(in []byte) (*domain.CustomNode, error) {
 	var f func(*html.Node, *domain.CustomNode) *domain.CustomNode
 	f = func(n *html.Node, cNode *domain.CustomNode) *domain.CustomNode {
 		if n.Type == html.ElementNode {
-			cNode.Type = htmlToGomponentsName(n.Data)
+			cNode.SetType(n.Data)
 
 			for _, attr := range n.Attr {
-				key := htmlToGomponentsName(attr.Key)
-				cNode.AddAttr(key, attr.Val)
+				cNode.AddAttr(attr.Key, attr.Val)
 			}
 		}
 
@@ -68,19 +65,4 @@ func (p Parser) FromBytes(in []byte) (*domain.CustomNode, error) {
 
 func New() Parser {
 	return Parser{}
-}
-
-func htmlToGomponentsName(in string) string {
-	switch in {
-	case "head":
-		return "c.Head"
-	case "thead":
-		return "THead"
-	case "tbody":
-		return "TBody"
-	case "id":
-		return "ID"
-	default:
-		return cases.Title(language.English).String(in)
-	}
 }
