@@ -25,33 +25,19 @@ jobs:
         workload_identity_provider: 'projects/34272123332/locations/global/workloadIdentityPools/htg-github/providers/htg-repo'
         service_account: "github-docker-connector@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com"
     
-    - name: Configure gcloud to use the authenticated identity
-      run: |
-        gcloud config set account github-docker-connector@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com
-
-    
     - name: Set up Google Cloud SDK
       uses: google-github-actions/setup-gcloud@v2
     
-    - name: Debug gcloud authentication
+    - name: Configure Docker to use gcloud for authentication
       run: |
-        gcloud auth list
-        gcloud config list
-    
-    - name: Configure Docker to use the gcloud command-line tool credential helper
-      run: |
-        # gcloud auth configure-docker europe-west1-docker.pkg.dev -q
-        gcloud auth login
-        gcloud auth print-access-token
-        # docker login -u oauth2accesstoken -p "$(gcloud auth print-access-token)" https://europe-west1-docker.pkg.dev
-        
+        gcloud auth configure-docker europe-west1-docker.pkg.dev -q
+
     - name: Build Docker image
       run: |
         docker build -t europe-west1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/htg/htg:latest .
 
     - name: Push Docker image to Artifact Registry
       run: |
-        gcloud auth login
         docker push europe-west1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/htg/htg:latest
 
     - name: Deploy to Cloud Run
