@@ -2,11 +2,8 @@ name: Build and deploy to gcloud on pull request to main. Production
 
 on:
   push:
-    branches: [ "master" ]
-    paths:
-      - '**.go'
-      - 'Dockerfile'
-      - '!README.md'
+    branches: [ "master", "actions" ]
+
 
 jobs:
   build-and-deploy:
