@@ -1,7 +1,6 @@
-name: Build and deploy to gcloud
+name: Build and deploy to gcloud on pull request to main. Production
 
 on:
-  push: 
   pull_request:
     branches: [ "master" ]
 
