@@ -43,7 +43,9 @@ jobs:
       run: |
         # gcloud auth configure-docker -q
         gcloud auth configure-docker europe-west1-docker.pkg.dev -q --account=github-docker-connector@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com
-    
+        docker system info | grep Username
+        docker login -u _json_key -p "$(gcloud auth print-access-token)" https://europe-west1-docker.pkg.dev
+
         
     - name: Build Docker image
       run: |
