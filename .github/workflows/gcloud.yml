@@ -50,7 +50,7 @@ jobs:
 
     - name: Update Repository Description
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GH_PAT }}
       run: |
         DESCRIPTION="Small tool for development using Gomponents template lib. It allows to convert HTML structures into Gomponents code. Deployed service is available at: $SERVICE_URL"
         curl -X PATCH \
