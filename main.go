@@ -1,5 +1,4 @@
 //go:build !unsafe
-// +build !unsafe
 
 package main
 

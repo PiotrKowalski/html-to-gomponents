@@ -13,7 +13,6 @@ type parseHandler struct {
 }
 
 func (h parseHandler) Handle(ctx context.Context, in requests.Parse) (responses.Parse, error) {
-
 	cNode, err := h.parser.FromBytes(in.Body)
 	if err != nil {
 		return responses.Parse{}, err

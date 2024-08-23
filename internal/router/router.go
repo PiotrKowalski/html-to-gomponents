@@ -15,7 +15,7 @@ func New(app app.Application) (*echo.Echo, error) {
 	e := echo.New()
 	e.Use(sessionIdentifier)
 
-	e.Use(middleware.BodyLimit("5000"))
+	e.Use(middleware.BodyLimit("25000"))
 
 	config := middleware.RateLimiterConfig{
 		Skipper: middleware.DefaultSkipper,
