@@ -2,11 +2,8 @@ name: Build and deploy to gcloud on pull request to main. Production
 
 on:
   push:
-    branches: [ "master" ]
-    paths:
-      - '**.go'
-      - 'Dockerfile'
-      - '!README.md'
+    branches: [ "master", "actions" ]
+
 
 jobs:
   build-and-deploy:
@@ -42,6 +39,7 @@ jobs:
         docker push europe-west1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/htg/htg:latest
 
     - name: Deploy to Cloud Run
+      id: run
       run: |
         gcloud run deploy html-to-gomponents \
         --image europe-west1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/htg/htg:latest \
@@ -50,14 +48,16 @@ jobs:
         --allow-unauthenticated
         
         SERVICE_URL=$(gcloud run services describe html-to-gomponents --platform managed --region europe-west1 --format "value(status.url)")
-
+        echo "SERVICE_URL=$SERVICE_URL" >> "$GITHUB_OUTPUT"
+        
     - name: Update Repository Description
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GH_PAT }}
       run: |
-        DESCRIPTION="Small tool for development using Gomponents template lib. It allows to convert HTML structures into Gomponents code. Deployed service is available at: $SERVICE_URL"
+        DESCRIPTION="Small tool for development using Gomponents template lib. It allows to convert HTML structures into Gomponents code. Deployed service is available at: ${{ steps.run.outputs.SERVICE_URL }}"
         curl -X PATCH \
-          -H "Authorization: token $GITHUB_TOKEN" \
-          -H "Accept: application/vnd.github.v3+json" \
+          -H "Authorization: Bearer $GITHUB_TOKEN" \
+          -H "Accept: application/vnd.github+json" \
+          -H "X-GitHub-Api-Version: 2022-11-28" \
           https://api.github.com/repos/${{ github.repository }} \
           -d "{\"description\": \"$DESCRIPTION\"}"
