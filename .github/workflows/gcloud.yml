@@ -1,8 +1,6 @@
-name: Build and deploy to gcloud
+name: Build and deploy to gcloud on pull request to main. Production
 
 on:
-  push:
-    branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
 
@@ -10,6 +8,11 @@ jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
     environment: production
+    env:
+      ACTIONS_STEP_DEBUG: true
+    permissions:
+      contents: 'read'
+      id-token: 'write'
 
     steps:
     - name: Checkout code
@@ -18,15 +21,15 @@ jobs:
     - id: 'auth'
       uses: 'google-github-actions/auth@v2'
       with:
-        project_id: ${{ secrets.GCP_PROJECT_ID }}
         workload_identity_provider: 'projects/34272123332/locations/global/workloadIdentityPools/htg-github/providers/htg-repo'
+        service_account: "github-docker-connector@${{ secrets.GCP_PROJECT_ID }}.iam.gserviceaccount.com"
     
     - name: Set up Google Cloud SDK
       uses: google-github-actions/setup-gcloud@v2
-
-    - name: Authenticate Docker with Artifact Registry
+    
+    - name: Configure Docker to use gcloud for authentication
       run: |
-        echo "${{ secrets.GCP_SA_KEY }}" | docker login -u _json_key --password-stdin https://europe-west1-docker.pkg.dev
+        gcloud auth configure-docker europe-west1-docker.pkg.dev -q
 
     - name: Build Docker image
       run: |
@@ -36,10 +39,10 @@ jobs:
       run: |
         docker push europe-west1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/htg/htg:latest
 
-    # - name: Deploy to Cloud Run
-    #   run: |
-    #     gcloud run deploy your-service-name \
-    #     --image europe-west1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/your-repository/your-image:latest \
-    #     --region <REGION> \
-    #     --platform managed \
-    #     --allow-unauthenticated
+    - name: Deploy to Cloud Run
+      run: |
+        gcloud run deploy html-to-gomponents \
+        --image europe-west1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/htg/htg:latest \
+        --region europe-west1 \
+        --platform managed \
+        --allow-unauthenticated
