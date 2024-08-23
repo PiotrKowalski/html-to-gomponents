@@ -44,8 +44,6 @@ jobs:
 
     - name: Log auth info
       run: |
-        docker system info | grep Username
-        docker login -u _json_key -p "$(gcloud auth print-access-token)" https://europe-west1-docker.pkg.dev
         cat ~/.docker/config.json
         
     - name: Build Docker image
