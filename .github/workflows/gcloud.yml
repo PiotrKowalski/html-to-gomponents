@@ -42,7 +42,7 @@ jobs:
 
     - name: Deploy to Cloud Run
       run: |
-        gcloud run deploy your-service-name \
+        gcloud run deploy HTML-to-Gomponents \
         --image europe-west1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/htg/htg:latest \
         --region europe-west1 \
         --platform managed \
