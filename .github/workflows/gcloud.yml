@@ -49,7 +49,7 @@ jobs:
         --platform managed \
         --allow-unauthenticated
         
-        SERVICE_URL=$(gcloud run services describe YOUR_SERVICE_NAME --platform managed --region YOUR_REGION --format "value(status.url)")
+        SERVICE_URL=$(gcloud run services describe html-to-gomponents --platform managed --region europe-west1 --format "value(status.url)")
 
     - name: Update README with Service URL
       run: |
