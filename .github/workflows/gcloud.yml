@@ -54,7 +54,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GH_PAT }}
       run: |
-        DESCRIPTION="Small tool for development using Gomponents template lib. It allows to convert HTML structures into Gomponents code. Deployed service is available at: ${{ steps.run.outputs.SERVICE_URL }}"
+        DESCRIPTION="Small tool for development using Gomponents template lib. It allows to convert HTML structures into Gomponents code. Deployed service is available at: https://htg.piotrkowalski.me/ or ${{ steps.run.outputs.SERVICE_URL }}"
         curl -X PATCH \
           -H "Authorization: Bearer $GITHUB_TOKEN" \
           -H "Accept: application/vnd.github+json" \
