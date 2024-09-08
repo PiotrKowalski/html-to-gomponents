@@ -54,13 +54,12 @@ func createParseHandler(application app.Application) echo.HandlerFunc {
 }
 
 func indexPage() (string, g.Node) {
-	return "HTML To Gomponents", Div(Class("flex flex-row justify-center  h-screen grow"),
+	return "HTML To Gomponents", Div(Class("flex flex-row justify-between grow sm:gap-0 md:gap-2 lg:gap-4"),
 
-		Div(Class("basis-5/12 bg-gray-200 flex flex-col"), hx.Boost("true"), hx.Trigger("load"), hx.Post("/parse"), hx.Target("#result"),
+		Div(Class("basis-1/2 bg-gray-200 flex flex-col"), hx.Boost("true"), hx.Trigger("load"), hx.Post("/parse"), hx.Target("#result"),
 			Textarea(ID("htmlText"), Class("grow  w-full  border-gray-300 bg-gray-100 align-top shadow-sm sm:text-sm"), Name("htmlText"), hx.Boost("true"), hx.Trigger("input from:#htmlText"), hx.Post("/parse"), hx.Target("#result"), Placeholder("WRITE HTML HERE")),
 		),
-		Div(Class("basis-1/12 bg-gray-200")),
-		Div(Class("basis-5/12 bg-gray-200 flex flex-col"),
+		Div(Class("basis-1/2 bg-gray-200 flex flex-col"),
 			Textarea(ID("result"), Class("grow  w-full  border-gray-300 bg-gray-100 align-top shadow-sm sm:text-sm "), ReadOnly(), Name("result"), ID("result"), hx.Swap("innerHTML"), result("")),
 		),
 	)
@@ -68,7 +67,6 @@ func indexPage() (string, g.Node) {
 
 func result(str string) g.Node {
 	return g.Text(str)
-
 }
 
 func Page(title, path string, body g.Node) g.Node {
@@ -76,21 +74,28 @@ func Page(title, path string, body g.Node) g.Node {
 		Title:    title,
 		Language: "en",
 		Head: []g.Node{
-
 			Script(Src("https://cdn.tailwindcss.com?plugins=typography,forms")),
-			Script(Src("https://unpkg.com/htmx.org")),
+			Script(Src("htmx.min.js")),
+			Link(Rel("icon"), Href("favicon.ico")),
 		},
 		Body: []g.Node{
-			Class("h-screen bg-gray-200"),
-			Container(
-				Div(Class("flex flex-col"),
+			Div(Class("bg-gray-200 w-screen rounded-none"),
+				Div(Class("mx-auto h-screen flex flex-col max-w-7xl sm:px-0 md:px-4 lg:px-8"),
 					body,
+					PageFooter(),
 				),
 			),
 		},
 	})
 }
 
-func Container(children ...g.Node) g.Node {
-	return Div(Class("max-w-7xl mx-auto px-2 sm:px-6 lg:px-8"), g.Group(children))
+func PageFooter() g.Node {
+	return Footer(Class("prose prose-sm prose-indigo max-w-none"),
+		P(Class("text-center"),
+			g.Text("© by "),
+			A(Href("https://github.com/piotrkowalski"), g.Text("Piotr Kowalski")),
+			g.Text(" 2024"),
+			g.Text(". Please report bugs on "),
+			A(Href("https://github.com/PiotrKowalski/html-to-gomponents"), g.Text("Github Issues")),
+		))
 }
