@@ -16,6 +16,7 @@ FROM alpine:3.18
 WORKDIR /app
 
 COPY --from=build /app/main .
+COPY static static
 
 EXPOSE 3050
 

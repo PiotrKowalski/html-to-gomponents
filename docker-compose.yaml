@@ -4,7 +4,7 @@ services:
   app:
     build: .
     ports:
-      - "3050:3050"
+      - "3060:3050"
     environment:
       - ENV=local
     restart: always
