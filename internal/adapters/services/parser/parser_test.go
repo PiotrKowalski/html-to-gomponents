@@ -15,7 +15,7 @@ func FuzzFromBytes(f *testing.F) {
 	f.Add([]byte("</BodY><!0"))
 
 	f.Fuzz(func(t *testing.T, data []byte) {
-		if len(data) > 10000 { // Example limit (10KB)
+		if len(data) > 10000 { // (10KB)
 			t.Skip()
 		}
 		_, err := serviceParser.FromBytes(data)

@@ -11,7 +11,6 @@ import (
 	"html-to-gomponents/internal/adapters/services/parser"
 	"html-to-gomponents/internal/app"
 	"html-to-gomponents/internal/requests"
-	"log"
 	"net/http"
 )
 
@@ -30,8 +29,7 @@ func createParseHandler(application app.Application) echo.HandlerFunc {
 			if err != nil {
 				if errors.Is(err, parser.ParseErr) {
 					c.Logger().Error(err)
-					//c.Response().Status = http.StatusBadRequest
-					log.Println(err.Error())
+					c.Response().Status = http.StatusBadRequest
 					return result(err.Error()).Render(c.Response())
 				}
 				c.Logger().Error(err)
