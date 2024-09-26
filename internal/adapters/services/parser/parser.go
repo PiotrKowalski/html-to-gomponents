@@ -19,7 +19,6 @@ func (p Parser) FromBytes(in []byte) (*domain.CustomNode, error) {
 	if err != nil {
 		return nil, fmt.Errorf("%w: %v", ParseErr, err)
 	}
-
 	var findBody func(n *html.Node) *html.Node
 	findBody = func(n *html.Node) *html.Node {
 		if n.Data == "body" {
@@ -29,11 +28,13 @@ func (p Parser) FromBytes(in []byte) (*domain.CustomNode, error) {
 		for c := n.FirstChild; c != nil; c = c.NextSibling {
 			e = findBody(c)
 		}
-
 		return e
 	}
 
 	body := findBody(hNode)
+	if body == nil {
+		return nil, fmt.Errorf("%w", ParseErr)
+	}
 
 	var f func(*html.Node, *domain.CustomNode) *domain.CustomNode
 	f = func(n *html.Node, cNode *domain.CustomNode) *domain.CustomNode {

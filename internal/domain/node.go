@@ -32,10 +32,8 @@ func (n *CustomNode) SetType(in string) {
 		n.customType = true
 	case "svg":
 		n.Type = "SVG"
-
 	default:
-		n.Type = cases.Title(language.English).String(in)
-
+		n.Type = cases.Title(language.English).String(removeSpecialChars(in))
 	}
 }
 
@@ -95,10 +93,6 @@ func (n *CustomNode) String() string {
 	str = fmt.Sprintf("%s\n%s)", str, strings.Repeat(" ", int(n.Level)))
 
 	return removeBrackets(str)
-}
-
-func removeBrackets(s string) string {
-	return strings.ReplaceAll(strings.ReplaceAll(s, "[", ""), "]", "")
 }
 
 type Attr struct {
