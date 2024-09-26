@@ -2,10 +2,11 @@ package domain
 
 import (
 	"fmt"
-	"golang.org/x/text/cases"
-	"golang.org/x/text/language"
 	"slices"
 	"strings"
+
+	"golang.org/x/text/cases"
+	"golang.org/x/text/language"
 )
 
 type CustomNode struct {
@@ -30,6 +31,18 @@ func (n *CustomNode) SetType(in string) {
 	case "path":
 		n.Type = "path"
 		n.customType = true
+	case "circle":
+		n.Type = "circle"
+		n.customType = true
+	case "rect":
+		n.Type = "rect"
+		n.customType = true
+	case "line":
+		n.Type = "line"
+		n.customType = true
+	case "polyline":
+		n.Type = "line"
+		n.customType = true
 	case "svg":
 		n.Type = "SVG"
 
@@ -40,7 +53,7 @@ func (n *CustomNode) SetType(in string) {
 }
 
 func (n *CustomNode) AddAttr(key, value string) {
-	if slices.Contains([]string{"xmlns", "fill", "viewBox", "stroke", "stroke-width", "fill-rule", "d", "stroke-linecap", "stroke-linejoin"}, key) {
+	if slices.Contains([]string{"xmlns", "fill", "viewBox", "stroke", "stroke-width", "fill-rule", "d", "stroke-linecap", "stroke-linejoin", "cx", "cy", "r", "x", "y", "rx", "ry", "x1", "x2", "y1", "y2", "points"}, key) {
 		n.Attrs = append(n.Attrs, Attr{
 			custom: true,
 			key:    key,
@@ -80,7 +93,6 @@ func (n *CustomNode) String() string {
 			} else if len(v.value) == 0 {
 				str = fmt.Sprintf("%s%s(),", str, v.key)
 			}
-
 		}
 	}
 
