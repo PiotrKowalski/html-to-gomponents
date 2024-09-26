@@ -29,6 +29,5 @@ func FuzzFromBytes(f *testing.F) {
 }
 
 func isExpectedError(err error) bool {
-	// You can customize this based on what types of errors you expect.
 	return err != nil && errors.Is(err, ParseErr)
 }
