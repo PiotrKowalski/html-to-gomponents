@@ -62,16 +62,21 @@ func (n *CustomNode) AddAttr(key, value string) {
 		return
 	}
 
-	switch key {
-	case "id":
+	switch {
+	case key == "id":
 		n.Attrs = append(n.Attrs, Attr{key: "ID", value: value})
-		return
-	case "g.Text":
+	case key == "g.Text":
 		n.Attrs = append(n.Attrs, Attr{key: key, value: value})
-		return
+	case strings.ContainsRune(key, '-'):
+		s := strings.SplitN(key, "-", 2)
+		n.Attrs = append(n.Attrs, Attr{
+			hyphenated: true,
+			key:        cases.Title(language.English).String(s[0]),
+			arg:        s[1],
+			value:      value,
+		})
 	default:
 		n.Attrs = append(n.Attrs, Attr{key: cases.Title(language.English).String(key), value: value})
-		return
 	}
 }
 
@@ -86,11 +91,14 @@ func (n *CustomNode) String() string {
 
 	if len(n.Attrs) > 0 {
 		for _, v := range n.Attrs {
-			if v.custom {
+			switch {
+			case v.custom:
 				str = fmt.Sprintf("%sg.Attr(\"%s\",\"%s\"),", str, v.key, v.value)
-			} else if len(v.value) > 0 {
+			case v.hyphenated:
+				str = fmt.Sprintf("%s%s(\"%s\", \"%s\"),", str, v.key, v.arg, v.value)
+			case len(v.value) > 0:
 				str = fmt.Sprintf("%s%s(\"%s\"),", str, v.key, v.value)
-			} else if len(v.value) == 0 {
+			default:
 				str = fmt.Sprintf("%s%s(),", str, v.key)
 			}
 		}
@@ -114,6 +122,6 @@ func removeBrackets(s string) string {
 }
 
 type Attr struct {
-	custom     bool
-	key, value string
+	custom, hyphenated bool
+	key, value, arg    string
 }
