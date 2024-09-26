@@ -65,6 +65,8 @@ func (n *CustomNode) AddAttr(key, value string) {
 	switch {
 	case key == "id":
 		n.Attrs = append(n.Attrs, Attr{key: "ID", value: value})
+	case key == "tabindex":
+		n.Attrs = append(n.Attrs, Attr{key: "TabIndex", value: value})
 	case key == "g.Text":
 		n.Attrs = append(n.Attrs, Attr{key: key, value: value})
 	case strings.ContainsRune(key, '-'):
