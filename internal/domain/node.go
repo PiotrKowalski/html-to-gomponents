@@ -91,8 +91,7 @@ func (n *CustomNode) String() string {
 	}
 
 	str = fmt.Sprintf("%s\n%s)", str, strings.Repeat(" ", int(n.Level)))
-
-	return removeBrackets(str)
+	return str
 }
 
 type Attr struct {
