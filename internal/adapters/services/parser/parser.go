@@ -47,7 +47,7 @@ func (p Parser) FromBytes(in []byte) (*domain.CustomNode, error) {
 		}
 
 		if n.Type == html.TextNode && len(strings.TrimSpace(n.Data)) > 0 {
-			cNode.ParentNode.AddAttr("g.Text", strings.TrimSpace(n.Data))
+			cNode.ParentNode.AddAttr("Text", strings.TrimSpace(n.Data))
 		}
 
 		var i uint
