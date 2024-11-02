@@ -3,14 +3,14 @@ package view
 import (
 	"errors"
 	"github.com/labstack/echo/v4"
-	g "github.com/maragudk/gomponents"
-	hx "github.com/maragudk/gomponents-htmx"
-	hxhttp "github.com/maragudk/gomponents-htmx/http"
-	c "github.com/maragudk/gomponents/components"
-	. "github.com/maragudk/gomponents/html"
 	"html-to-gomponents/internal/adapters/services/parser"
 	"html-to-gomponents/internal/app"
 	"html-to-gomponents/internal/requests"
+	. "maragu.dev/gomponents"
+	hx "maragu.dev/gomponents-htmx"
+	hxhttp "maragu.dev/gomponents-htmx/http"
+	. "maragu.dev/gomponents/components"
+	. "maragu.dev/gomponents/html"
 	"net/http"
 )
 
@@ -52,7 +52,7 @@ func createParseHandler(application app.Application) echo.HandlerFunc {
 	}
 }
 
-func indexPage() (string, g.Node) {
+func indexPage() (string, Node) {
 	return "HTML To Gomponents", Div(Class("flex flex-row justify-between grow sm:gap-0 md:gap-2 lg:gap-4"),
 
 		Div(Class("basis-1/2 bg-gray-200 flex flex-col"), hx.Boost("true"), hx.Trigger("load"), hx.Post("/parse"), hx.Target("#result"),
@@ -64,20 +64,20 @@ func indexPage() (string, g.Node) {
 	)
 }
 
-func result(str string) g.Node {
-	return g.Text(str)
+func result(str string) Node {
+	return Text(str)
 }
 
-func Page(title, path string, body g.Node) g.Node {
-	return c.HTML5(c.HTML5Props{
+func Page(title, path string, body Node) Node {
+	return HTML5(HTML5Props{
 		Title:    title,
 		Language: "en",
-		Head: []g.Node{
+		Head: []Node{
 			Script(Src("https://cdn.tailwindcss.com?plugins=typography,forms")),
 			Script(Src("htmx.min.js")),
 			Link(Rel("icon"), Href("favicon.ico")),
 		},
-		Body: []g.Node{
+		Body: []Node{
 			Div(Class("bg-gray-200 w-screen rounded-none"),
 				Div(Class("mx-auto h-screen flex flex-col max-w-7xl sm:px-0 md:px-4 lg:px-8"),
 					body,
@@ -88,13 +88,13 @@ func Page(title, path string, body g.Node) g.Node {
 	})
 }
 
-func PageFooter() g.Node {
+func PageFooter() Node {
 	return Footer(Class("prose prose-sm prose-indigo max-w-none"),
 		P(Class("text-center"),
-			g.Text("© by "),
-			A(Href("https://github.com/piotrkowalski"), g.Text("Piotr Kowalski")),
-			g.Text(" 2024"),
-			g.Text(". Please report bugs on "),
-			A(Href("https://github.com/PiotrKowalski/html-to-gomponents"), g.Text("Github Issues")),
+			Text("© by "),
+			A(Href("https://github.com/piotrkowalski"), Text("Piotr Kowalski")),
+			Text(" 2024"),
+			Text(". Please report bugs on "),
+			A(Href("https://github.com/PiotrKowalski/html-to-gomponents"), Text("Github Issues")),
 		))
 }

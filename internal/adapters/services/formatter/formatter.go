@@ -11,11 +11,11 @@ type Formatter struct {
 func (f Formatter) Format(node *domain.CustomNode) (string, error) {
 	b := []byte(`package example
 import (
-	g "github.com/maragudk/gomponents"
-	. "github.com/maragudk/gomponents/html"
-	c "github.com/maragudk/gomponents/components"
+	. "maragu.dev/gomponents"
+	. "maragu.dev/gomponents/components"
+	. "maragu.dev/gomponents/html"
 )
-func example() g.Node {
+func example() Node {
 	return ` + node.String() + `
 }`)
 	dist, err := format.Source(b)

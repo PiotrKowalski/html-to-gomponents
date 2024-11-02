@@ -21,7 +21,7 @@ type CustomNode struct {
 func (n *CustomNode) SetType(in string) {
 	switch in {
 	case "head":
-		n.Type = "c.Head"
+		n.Type = "Head"
 	case "thead":
 		n.Type = "THead"
 	case "tbody":
@@ -65,7 +65,7 @@ func (n *CustomNode) AddAttr(key, value string) {
 		n.Attrs = append(n.Attrs, Attr{key: "ID", value: value})
 	case key == "tabindex":
 		n.Attrs = append(n.Attrs, Attr{key: "TabIndex", value: value})
-	case key == "g.Text":
+	case key == "Text":
 		n.Attrs = append(n.Attrs, Attr{key: key, value: value})
 	case strings.ContainsRune(key, '-'):
 		s := strings.SplitN(key, "-", 2)
@@ -84,7 +84,7 @@ func (n *CustomNode) String() string {
 	str := ""
 
 	if n.customType {
-		str += "g.El(\"" + n.Type + "\","
+		str += "El(\"" + n.Type + "\","
 	} else {
 		str += n.Type + "("
 	}
@@ -93,7 +93,7 @@ func (n *CustomNode) String() string {
 		for _, v := range n.Attrs {
 			switch {
 			case v.custom:
-				str = fmt.Sprintf("%sg.Attr(\"%s\",\"%s\"),", str, v.key, v.value)
+				str = fmt.Sprintf("%sAttr(\"%s\",\"%s\"),", str, v.key, v.value)
 			case v.hyphenated:
 				str = fmt.Sprintf("%s%s(\"%s\", \"%s\"),", str, v.key, v.arg, v.value)
 			case len(v.value) > 0:
